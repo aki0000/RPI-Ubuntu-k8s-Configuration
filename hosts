@@ -1,2 +1,2 @@
 [server]
-INITIAL_Address ansible_user=ubuntu
+{IP Address} ansible_user=ubuntu

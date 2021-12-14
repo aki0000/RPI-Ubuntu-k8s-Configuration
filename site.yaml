@@ -1,9 +1,8 @@
 - hosts: server
   tasks:
-  - name: Consfigure IP address  
-    become: yes
-    vars: 
-      network_prefix
+  # IP Address Section
+  - name: Change IP address  
+    become: yes    
     shell: |
       echo \
       'network:
@@ -18,10 +17,33 @@
             gateway4: '{{ gateway_address }}'
             nameservers:
               addresses:
-                - '{{ gateway_address }}' > /etc/netplan/99-network.yaml
-
-  - name: Apply netpaln
+                - '{{ gateway_address }}'' > /etc/netplan/99-network.yaml      
+  
+  # Hostname Section
+  - name: Change a Hostname
     become: yes
-    shell: | 
-       netplan apply
-       exit
+    shell: |
+       hostnamectl set-hostname '{{ hostname }}'
+
+  # Reboot Section
+  - name: Execute reboot
+    become: yes
+    shell: |
+       sleep 2 && reboot
+    async: 1
+    poll: 0
+  - name: Wait for SSH port down
+    wait_for:
+      host: '{{ inventory_hostname }}'
+      port: 22
+      state: stopped
+    delegate_to: 127.0.0.1
+  - name: Wait for SSH port up
+    wait_for:
+      host: '{{ inventory_hostname }}'
+      port: 22
+      state: started
+    delegate_to: 127.0.0.1    
+  - name: Debug
+    debug:
+      msg: Finish!
