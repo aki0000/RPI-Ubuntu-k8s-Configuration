@@ -34,13 +34,13 @@
     poll: 0
   - name: Wait for SSH port down
     wait_for:
-      host: '{{ inventory_hostname }}'
+      host: '{{ server_address }}'
       port: 22
       state: stopped
     delegate_to: 127.0.0.1
   - name: Wait for SSH port up
     wait_for:
-      host: '{{ inventory_hostname }}'
+      host: '{{ server_address }}'
       port: 22
       state: started
     delegate_to: 127.0.0.1    
