@@ -1,0 +1,2 @@
+[server]
+INITIAL_Address ansible_user=ubuntu

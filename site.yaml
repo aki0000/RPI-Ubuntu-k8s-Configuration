@@ -1,0 +1,27 @@
+- hosts: server
+  tasks:
+  - name: Consfigure IP address  
+    become: yes
+    vars: 
+      network_prefix
+    shell: |
+      echo \
+      'network:
+        version: 2
+        renderer: networkd
+        ethernets:
+          eth0:
+            dhcp4: false
+            dhcp6: false
+            addresses:
+              - '{{ server_address }}'/24
+            gateway4: '{{ gateway_address }}'
+            nameservers:
+              addresses:
+                - '{{ gateway_address }}' > /etc/netplan/99-network.yaml
+
+  - name: Apply netpaln
+    become: yes
+    shell: | 
+       netplan apply
+       exit
