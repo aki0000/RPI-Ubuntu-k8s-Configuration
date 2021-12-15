@@ -1,2 +1,1 @@
-[server]
-{address} ansible_user=ubuntu
+[servers]
